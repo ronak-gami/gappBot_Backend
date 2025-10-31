@@ -3,11 +3,10 @@ import { generateToken } from "../utils/jwt.util.js";
 
 const registerController = async (req, res) => {
   try {
-    const { profilePicture, fullName, phoneNo, password, gender, birthdate } =
-      req.body;
+    const { firstName, lastName, email, password } = req.body;
 
     // Validate required fields
-    if (!fullName || !phoneNo || !password || !gender || !birthdate) {
+    if (!firstName || !lastName || !email || !password) {
       return res.status(400).json({
         success: false,
         message: "Please provide all required fields",
@@ -15,22 +14,20 @@ const registerController = async (req, res) => {
     }
 
     // Check if user already exists
-    const existingUser = await User.findOne({ phoneNo });
+    const existingUser = await User.findOne({ email });
     if (existingUser) {
       return res.status(409).json({
         success: false,
-        message: "User with this phone number already exists",
+        message: "User with this email already exists",
       });
     }
 
     // Create new user
     const user = await User.create({
-      profilePicture,
-      fullName,
-      phoneNo,
+      firstName,
+      lastName,
+      email,
       password,
-      gender,
-      birthdate,
     });
 
     // Generate JWT token
@@ -39,11 +36,9 @@ const registerController = async (req, res) => {
     // Remove password from response
     const userResponse = {
       _id: user._id,
-      profilePicture: user.profilePicture,
-      fullName: user.fullName,
-      phoneNo: user.phoneNo,
-      gender: user.gender,
-      birthdate: user.birthdate,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      email: user.email,
       createdAt: user.createdAt,
     };
 
@@ -67,18 +62,18 @@ const registerController = async (req, res) => {
 
 const loginController = async (req, res) => {
   try {
-    const { phoneNo, password } = req.body;
+    const { email, password } = req.body;
 
     // Validate input
-    if (!phoneNo || !password) {
+    if (!email || !password) {
       return res.status(400).json({
         success: false,
-        message: "Please provide phone number and password",
+        message: "Please provide email and password",
       });
     }
 
-    // Find user by phone number
-    const user = await User.findOne({ phoneNo });
+    // Find user by email
+    const user = await User.findOne({ email });
     if (!user) {
       return res.status(401).json({
         success: false,
@@ -101,11 +96,9 @@ const loginController = async (req, res) => {
     // Remove password from response
     const userResponse = {
       _id: user._id,
-      profilePicture: user.profilePicture,
-      fullName: user.fullName,
-      phoneNo: user.phoneNo,
-      gender: user.gender,
-      birthdate: user.birthdate,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      email: user.email,
       createdAt: user.createdAt,
     };
 

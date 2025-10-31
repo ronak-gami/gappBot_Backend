@@ -23,6 +23,24 @@ app.get("/", (req, res) => {
   });
 });
 
+app.get("/api", (req, res) => {
+  res.status(200).json({
+    success: true,
+    message: "API is working! 🎉",
+    availableRoutes: {
+      user: {
+        register: "POST /api/user/register",
+        login: "POST /api/user/login",
+      },
+      upload: {
+        uploadMedia: "POST /api/upload",
+        getMedia: "GET /api/upload?type=image|video",
+        deleteMedia: "DELETE /api/upload/:id",
+      },
+    },
+  });
+});
+
 app.use("/api", mainRouter);
 
 const PORT = process.env.PORT;
