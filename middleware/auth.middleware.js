@@ -16,9 +16,11 @@ export const authenticate = async (req, res, next) => {
     // Verify token
     const decoded = verifyToken(token);
     if (!decoded) {
-      return res.status(401).json({
+      return res.status(405).json({
         success: false,
         message: "Invalid or expired token",
+        reason:
+          "Token verification failed. The token may be expired, malformed, or signed with an incorrect secret key.",
       });
     }
 

@@ -17,6 +17,10 @@ const mediaSchema = new mongoose.Schema(
       type: String,
       required: [true, "Media URL is required"],
     },
+    thumbnail: {
+      type: String, // Thumbnail URL for videos
+      default: null,
+    },
     publicId: {
       type: String,
       required: true,
